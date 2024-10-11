@@ -1,0 +1,1 @@
+This repository consists of all exercises passed as homework for the Machine Learning class, year 3 of university
