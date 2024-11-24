@@ -19,83 +19,81 @@ d = pd.DataFrame({'X1': [0, 0, 1, 1, 0, 0, 1, 1],
                   'Y' : [0, 1, 0, 1, 0, 1, 0, 1]})
 d=apply_counts(d, 'C')
 
-
-import numpy as np
-
-class BernoulliJB:
-    def __init__(self):
-        self.class_prob_ = None  # Stores P(Class)
-        self.joint_prob_ = None  # Stores joint P(Feature1, Feature2, ..., FeatureN | Class)
-        self.classes_ = None  # Stores unique classes
+print(d)
+# class BernoulliJB:
+#     def __init__(self):
+#         self.class_prob_ = None  # Stores P(Class)
+#         self.joint_prob_ = None  # Stores joint P(Feature1, Feature2, ..., FeatureN | Class)
+#         self.classes_ = None  # Stores unique classes
     
-    def fit(self, X, y):
-        self.classes_, class_counts = np.unique(y, return_counts=True)
-        n_classes = len(self.classes_)
-        n_features = X.shape[1]
+#     def fit(self, X, y):
+#         self.classes_, class_counts = np.unique(y, return_counts=True)
+#         n_classes = len(self.classes_)
+#         n_features = X.shape[1]
         
 
-        self.class_prob_ = class_counts / len(y)
+#         self.class_prob_ = class_counts / len(y)
         
 
-        self.joint_prob_ = np.zeros((n_classes, 2**n_features))
+#         self.joint_prob_ = np.zeros((n_classes, 2**n_features))
         
 
-        for idx, class_label in enumerate(self.classes_):
-            X_class = X[y == class_label]
-            n_samples_class = X_class.shape[0]
+#         for idx, class_label in enumerate(self.classes_):
+#             X_class = X[y == class_label]
+#             n_samples_class = X_class.shape[0]
             
 
-            for i in range(2**n_features):
+#             for i in range(2**n_features):
 
-                binary_repr = np.array([int(b) for b in np.binary_repr(i, width=n_features)])
+#                 binary_repr = np.array([int(b) for b in np.binary_repr(i, width=n_features)])
                 
 
-                prob = np.mean(np.all(X_class == binary_repr, axis=1))
-                self.joint_prob_[idx, i] = prob
+#                 prob = np.mean(np.all(X_class == binary_repr, axis=1))
+#                 self.joint_prob_[idx, i] = prob
                 
-    def predict_proba(self, X):
-        n_samples = X.shape[0]
-        n_features = X.shape[1]
-        n_classes = len(self.classes_)
+#     def predict_proba(self, X):
+#         n_samples = X.shape[0]
+#         n_features = X.shape[1]
+#         n_classes = len(self.classes_)
         
-        prob_X = np.zeros((n_samples, n_classes))
+#         prob_X = np.zeros((n_samples, n_classes))
         
-        for i in range(n_samples):
-            sample = X[i]
-            index = int("".join(sample.astype(int).astype(str)), 2)
+#         for i in range(n_samples):
+#             sample = X[i]
+#             index = int("".join(sample.astype(int).astype(str)), 2)
             
-            joint_probs = self.joint_prob_[:, index] * self.class_prob_
-            prob_X[i, :] = joint_probs / joint_probs.sum()  
+#             joint_probs = self.joint_prob_[:, index] * self.class_prob_
+#             prob_X[i, :] = joint_probs / joint_probs.sum()  
         
-        return prob_X
+#         return prob_X
 
-model = BernoulliJB()
-X = d[['X1','X2']].values
-Y = d['Y'].values
-model.fit(X,Y)
-
-
-num_classes = len(model.class_prob_)
+# model = BernoulliJB()
+# X = d[['X1','X2']].values
+# Y = d['Y'].values
+# model.fit(X,Y)
 
 
-num_features = model.joint_prob_.shape[1]
+# num_classes = len(model.class_prob_)
 
 
-total_probabilities = num_classes * (2 ** num_features)
-
-print("Number of classes:", num_classes)
-print("Number of features:", num_features)
-print("Total probabilities estimated:", total_probabilities)
-
-X_test = np.array([[0, 0]])  
-probs = model.predict_proba(X_test)
-
-print("Probability estimates for BernoulliJB:", probs)
-
-naive_model = BernoulliNB(alpha = 1)  
-naive_model.fit(X, Y)
+# num_features = model.joint_prob_.shape[1]
 
 
-naive_probs = naive_model.predict_proba(X_test)
+# total_probabilities = num_classes * (2 ** num_features)
 
-print("Predicted naive probabilities:", naive_probs)
+# print("Number of classes:", num_classes)
+# print("Number of features:", num_features)
+# print("Total probabilities estimated:", total_probabilities)
+
+# X_test = np.array([[0, 0]])  
+# probs = model.predict_proba(X_test)
+
+# print("Probability estimates for BernoulliJB:", probs)
+
+# naive_model = BernoulliNB(alpha = 0)  
+# naive_model.fit(X, Y)
+
+
+# naive_probs = naive_model.predict_proba(X_test)
+
+# print("Predicted naive probabilities:", naive_probs)
